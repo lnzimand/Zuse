@@ -2,7 +2,6 @@ from fastapi import HTTPException
 import requests
 from sqlalchemy.orm import Session
 from models import Address, Company, Geo, User
-import services
 
 
 def fetch_users():

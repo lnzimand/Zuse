@@ -1,11 +1,9 @@
-import json
 from typing import List
 from fastapi import Depends, FastAPI, HTTPException, WebSocket
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from helpers import process_users, user_to_dict
 
-import models
 import schemas
 import services
 import html
