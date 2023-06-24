@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Net.WebSockets;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace ServiceApplication
 {
@@ -42,94 +44,120 @@ namespace ServiceApplication
 
         private void InitializeDatabaseConnection()
         {
-            var connectionString = "Driver={SQL Server};Server={Server};Database={database};Uid={user};Pwd={password};";
+            var connectionString = "Driver={SQL Server};Server=DESKTOP-STVGQ9Q;Database=project_csharp;Uid=odbc_user;Pwd=password;";
             connection = new OdbcConnection(connectionString);
         }
 
         private async void StartService()
         {
-            await webSocket.ConnectAsync(new Uri("ws://localhost:8000/ws-advanced"), CancellationToken.None);
-            await StartDatabaseQueryAndSendData();
-        }
-
-        private async Task StartDatabaseQueryAndSendData()
-        {
-            Console.WriteLine(webSocket.State.ToString());
-
-            while (webSocket.State == WebSocketState.Open)
+            try
             {
-                try
+                await webSocket.ConnectAsync(new Uri("ws://localhost:8000/ws-advanced"), CancellationToken.None);
+                await StartDatabaseQueryAndSendData(new CancellationTokenSource().Token);
+            }
+            catch (WebSocketException ex)
+            {
+                if (ex.InnerException is SocketException socketException)
                 {
-                    var command = new OdbcCommand(query, connection);
-                    var buffer = new byte[1024 * 4];
-
-                    int placeHolderId = new Random().Next(1, 100);
-                    List<object> results = new List<object>();
-
-                    await connection.OpenAsync();
-                    command.Parameters.AddWithValue("@Id", placeHolderId);
-                    var reader = await command.ExecuteReaderAsync();
-
-                    while (reader.Read())
+                    if (socketException.SocketErrorCode == SocketError.ConnectionAborted)
                     {
-                        var jsonData = new
-                        {
-                            action = "create_user",
-                            user = new
-                            {
-                                name = reader["name"].ToString(),
-                                username = reader["username"].ToString(),
-                                email = reader["email"].ToString(),
-                                phone = reader["phone"].ToString(),
-                                website = reader["website"].ToString(),
-                                address = new
-                                {
-                                    street = reader["street"].ToString(),
-                                    suite = reader["suite"].ToString(),
-                                    city = reader["city"].ToString(),
-                                    zipcode = reader["zipcode"].ToString(),
-                                    geo = new
-                                    {
-                                        lat = reader["lat"].ToString(),
-                                        lng = reader["lng"].ToString()
-                                    }
-                                },
-                                company = new
-                                {
-                                    name = reader["company_name"].ToString(),
-                                    catchphrase = reader["catchphrase"].ToString(),
-                                    bs = reader["bs"].ToString()
-                                }
-                            }
-                        };
-                        results.Add(jsonData);
-                    }
-
-                    reader.Close();
-
-                    if (results.Count > 0)
-                    {
-                        string json = JsonConvert.SerializeObject(results[0], Formatting.Indented);
-                        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
-                        ArraySegment<byte> segment = new ArraySegment<byte>(jsonBytes);
-
-                        await webSocket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
-
-                        WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                        Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, result.Count));
+                        Console.WriteLine("WebSocket connection was prematurely closed by the host machine");
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex.ToString());
-                }
-                finally
-                {
-                    connection.Close();
-                    await Task.Delay(5000);
+                    Console.WriteLine($"WebSocket exception occurred: {ex.Message}");
                 }
             }
         }
+
+        private async Task StartDatabaseQueryAndSendData(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var command = new OdbcCommand(query, connection);
+                var buffer = new byte[1024 * 4];
+
+                while (!cancellationToken.IsCancellationRequested && webSocket.State == WebSocketState.Open)
+                {
+                    try
+                    {
+                        int placeHolderId = new Random().Next(1, 100);
+                        List<object> results = new List<object>();
+
+                        await connection.OpenAsync(cancellationToken);
+                        command.Parameters.AddWithValue("@Id", placeHolderId);
+                        var reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection, cancellationToken);
+
+                        while (reader.Read())
+                        {
+                            var jsonData = new
+                            {
+                                action = "create_user",
+                                user = new
+                                {
+                                    name = reader["name"].ToString(),
+                                    username = reader["username"].ToString(),
+                                    email = reader["email"].ToString(),
+                                    phone = reader["phone"].ToString(),
+                                    website = reader["website"].ToString(),
+                                    address = new
+                                    {
+                                        street = reader["street"].ToString(),
+                                        suite = reader["suite"].ToString(),
+                                        city = reader["city"].ToString(),
+                                        zipcode = reader["zipcode"].ToString(),
+                                        geo = new
+                                        {
+                                            lat = reader["lat"].ToString(),
+                                            lng = reader["lng"].ToString()
+                                        }
+                                    },
+                                    company = new
+                                    {
+                                        name = reader["company_name"].ToString(),
+                                        catchphrase = reader["catchphrase"].ToString(),
+                                        bs = reader["bs"].ToString()
+                                    }
+                                }
+                            };
+                            results.Add(jsonData);
+                        }
+
+                        reader.Close();
+
+                        if (results.Count > 0)
+                        {
+                            string json = JsonConvert.SerializeObject(results[0], Formatting.Indented);
+                            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+                            ArraySegment<byte> segment = new ArraySegment<byte>(jsonBytes);
+
+                            await webSocket.SendAsync(segment, WebSocketMessageType.Text, true, cancellationToken);
+
+                            WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
+                            Console.WriteLine(Encoding.UTF8.GetString(buffer, 0, result.Count));
+                        }
+
+                        await Task.Delay(5000, cancellationToken);
+                    }
+                    catch (WebSocketException ex)
+                    {
+                        Console.WriteLine($"WebSocket exception occurred: {ex.Message}");
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {

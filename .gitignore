@@ -1,5 +1,7 @@
 *.db
 __pycache__
-bin/
-obj/
+ServiceApplication/bin/
+ServiceApplication/obj/
+ServiceApplication/packages/
+ServiceApplication/.vs/
 .vscode/
