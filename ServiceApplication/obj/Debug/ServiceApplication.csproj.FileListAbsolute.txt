@@ -1,0 +1,13 @@
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\bin\Debug\ServiceApplication.exe.config
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\bin\Debug\ServiceApplication.exe
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\bin\Debug\ServiceApplication.pdb
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\bin\Debug\Newtonsoft.Json.dll
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\bin\Debug\Newtonsoft.Json.xml
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.csproj.AssemblyReference.cache
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.csproj.SuggestedBindingRedirects.cache
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.Properties.Resources.resources
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.csproj.GenerateResource.cache
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.csproj.CoreCompileInputs.cache
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.csproj.CopyComplete
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.exe
+\\wsl.localhost\Ubuntu\home\yaqwaqwa\Programming\Python\fastapi_and_csharp\ServiceApplication\obj\Debug\ServiceApplication.pdb

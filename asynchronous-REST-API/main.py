@@ -1,8 +1,8 @@
 from typing import List
-from fastapi import Depends, FastAPI, HTTPException, WebSocket
+from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
-from helpers import process_users, user_to_dict
+from helpers import process_users, user_to_dict, DotDict
 
 import schemas
 import services
@@ -55,6 +55,18 @@ async def process_user_action(db: Session, action: str, data: dict):
         users = await services.get_all_users(db=db)
         user_dicts = [user_to_dict(user) for user in users]
         return {"message": f"{len(users)} users found", "users": user_dicts}
+
+    elif action == "create_user":
+        user = DotDict(data.get("user"))
+        email_exists = await services.get_user(db=db, search_param=user.email)
+        if email_exists:
+            {"message": "Email already exists"}
+
+        username_exists = await services.get_user(db=db, search_param=user.username)
+        if username_exists:
+            return {"message": "Username already exists"}
+        user = await services.create_user(db=db, user=user)
+        return {"message": "User successfully created", "user": user_to_dict(user=user)}
 
     else:
         return {"message": "Invalid action"}
@@ -124,13 +136,20 @@ async def websocket_endpoint(
     websocket: WebSocket,
     db: Session = Depends(get_db),
 ):
-    await websocket.accept()
-    while True:
-        data = await websocket.receive_json()
-        print(data)
-        action = data.get("action")
-        result = await process_user_action(db=db, action=action, data=data)
-        await websocket.send_json(result)
+    try:
+        await websocket.accept()
+        while True:
+            try:
+                data = await websocket.receive_json()
+                action = data.get("action")
+                result = await process_user_action(db=db, action=action, data=data)
+                await websocket.send_json(result)
+            except WebSocketDisconnect:
+                print("WebSocket disconnected")
+                break
+    except WebSocketDisconnect:
+        print("WebSocket connection failed")
+        pass
 
 
 @app.on_event("startup")

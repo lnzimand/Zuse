@@ -7,12 +7,11 @@ from models import Address, Company, Geo, User
 def fetch_users():
     url = "https://jsonplaceholder.typicode.com/users"
     response = requests.get(url=url)
-    if response.status_code == 200:
-        return response.json()
-    else:
+    if response.status_code != 200:
         raise HTTPException(
             status_code=500, detail="Failed to fetch users from the external API."
         )
+    return response.json()
 
 
 def process_users(db: Session):
@@ -59,3 +58,17 @@ def user_to_dict(user: User):
         "phone": user.phone,
         "website": user.website,
     }
+
+
+class DotDict(dict):
+    def __getattr__(self, attr):
+        value = self[attr]
+        if isinstance(value, dict):
+            value = DotDict(value)
+        return self[attr]
+
+    def __getitem__(self, key):
+        value = super().__getitem__(key)
+        if isinstance(value, dict):
+            value = DotDict(value)
+        return value
