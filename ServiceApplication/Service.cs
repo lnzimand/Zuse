@@ -122,9 +122,6 @@ namespace ServiceApplication
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
-                    // Handle any errors or interruptions gracefully
-                    // For example:
-                    // Log the exception
                 }
                 finally
                 {

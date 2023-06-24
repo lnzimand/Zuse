@@ -1,10 +1,10 @@
-# Python
+# _RESTful API & WebSocket in Python & C\#_
 
-## Asynchronous REST API and WebSocket API
+## **Asynchronous REST API and WebSocket (Python)**
 
 This project implements an Asynchronous REST API and a WebSocket API for interacting with an external REST API, processing data, and storing it in a SQLite database. The project also includes WebSocket features such as a ping-pong system and an advanced feature that updates or adds records in the database based on received JSON data.
 
-### Problem Statement
+### **Python Project Problem Statement**
 
 The goal of this project is to develop a system that performs the following tasks:
 
@@ -17,7 +17,7 @@ The goal of this project is to develop a system that performs the following task
 7. Implement CRUD (Create, Read, Update, Delete) operations using SQLAlchemy ORM.
 8. Implement a WebSocket system for basic communication and advanced features.
 
-### Technologies Used
+#### **Python Project Technologies Used**
 
 The project utilizes the following technologies:
 
@@ -27,7 +27,7 @@ The project utilizes the following technologies:
 - SQLite: A lightweight and serverless relational database management system.
 - WebSocket: A communication protocol providing full-duplex communication channels over a single TCP connection.
 
-### How to Run the Application
+#### **How to Run the Application**
 
 To run the application, follow these steps:
 
@@ -35,7 +35,7 @@ To run the application, follow these steps:
 2. Start the application using the command `uvicorn main:app --reload` OR `python3 -m uvicorn main:app --reload`.
 3. The application will be accessible at `http://localhost:8000`.
 
-### Endpoints and Documentation
+#### **Endpoints and Documentation**
 
 #### API Documentation
 
@@ -44,9 +44,9 @@ To run the application, follow these steps:
   - [ReDoc](http://localhost:8000/docs)
   - [JSON Schema](http://localhost:8000/openapi.json)
 
-#### Endpoints
+#### **Endpoints**
 
-##### Asynchronous REST API Endpoints
+##### **_Asynchronous REST API Endpoints_**
 
 - `GET /api/v1/users/{user_id}` - Get user details by ID
 - `POST /api/v1/users` - Create a new user.
@@ -54,12 +54,12 @@ To run the application, follow these steps:
 - `DELETE /api/v1/users/{user_id}` - Delete a user by ID.
 - `GET /api/v1/users` - Get all users
 
-##### WebSocket API Endpoints
+##### **_WebSocket API Endpoints_**
 
 - The WebSocket endpoint for basic communication is [Basic WebSocket](http://localhost:8000/ws-basic).
 - The WebSocket endpoint for the advanced feature is [Advance WebSocket](http://localhost:8000/ws-advanced).
 
-### Resources
+#### **_Python Project Resources_**
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Uvicorn Documentation](https://www.uvicorn.org/)
@@ -69,3 +69,68 @@ To run the application, follow these steps:
 - [WebSocket Protocol](https://tools.ietf.org/html/rfc6455)
 - [WebSockets FastAPI](https://fastapi.tiangolo.com/advanced/websockets/)
 - [JSONPlaceholder API](https://jsonplaceholder.typicode.com/users)
+
+## **A Constantly Running Service Application That Resides in The System Tray (C\#)**
+
+This project implements a running service application that resides in the system tray(NotifyIcon). Continuously runs in the background and maintain a WebSocket connection with the FastAPI application. The service application uses a DSN (Data Source Name) to connect to a local SQL Server database using ODBC. It executes a predefined SQL query to fetch data from the database.
+
+### **C# Project Problem Statement**
+
+The goal of this project is to develop a system that performs the following tasks:
+
+1. Continuously runs in the background and maintains a WebSocket connection with the FastAPI application.
+2. Performs a ping-pong operations with the WebSocket route of the FastAPI application.
+3. Handle any errors or interruptions to the WebSocket connection gracefully.
+4. Use a DSN to query a local SQL Server database using ODBC, convert the result to JSON, and then send it to the FastAPI application via the WebSocket connection.
+
+#### **C\# Project Technologies Used**
+
+The service application utilizes the following technologies:
+
+- .NET Framework or .NET Core: A cross-platform development framework for building applications.
+- WebSocket: A communication protocol providing full-duplex communication channels over a single TCP connection.
+- FastAPI: A modern, fast (high-performance) web framework for building APIs with Python.
+- SQL Server: A relational database management system used for storing and retrieving data.
+- ODBC: Open Database Connectivity, a standard for accessing databases.
+- JSON: A lightweight data interchange format.
+  How to Run the Application
+
+#### **How to run the service application**
+
+To run the application, follow these steps:
+
+1. Ensure that you have the .NET Framework or .NET Core installed on your system.
+2. Clone or download the C# service application to your local machine.
+3. Open the solution file in Visual Studio or your preferred C# development environment.
+4. Modify the necessary configuration settings in the code, such as the database connection details and etc.
+5. Build the solution to ensure all dependencies are resolved.
+6. Run the application, and it will start running in the background as a system tray application.
+7. Monitor the application's log or output for any errors or successful operations.
+8. Test the functionality by ensuring the WebSocket connection is established, database queries are executed, and JSON data is sent to the FastAPI application.
+
+#### **_C# Project Resources_**
+
+- [.NET Framework](https://dotnet.microsoft.com/)
+- [.NET Core](https://dotnet.microsoft.com/download)
+- [WebSocket Protocol](https://tools.ietf.org/html/rfc6455)
+- [SQL Server](https://www.microsoft.com/en-us/sql-server)
+- [ODBC](https://docs.microsoft.com/en-us/sql/odbc/reference/overview-of-the-odbc-driver-manager)
+- [Creating a Tray Application](https://www.codeproject.com/Articles/18683/Creating-a-Tasktray-Application)
+- [Creating Tray Applications in .NET: A Practical Guide](https://www.red-gate.com/simple-talk/development/dotnet-development/creating-tray-applications-in-net-a-practical-guide/)
+- [Generate Database Script with Table Data from SQL Server 2008](https://www.c-sharpcorner.com/UploadFile/b19d5a/generate-database-script-with-table-data-from-sql-server-2008/)
+- [Learn C# - Your First C# WebSocket Client](https://medium.com/nerd-for-tech/your-first-c-websocket-client-5e7acc30681d)
+- [Learn Microsoft - Add New Connections](https://learn.microsoft.com/en-us/visualstudio/data-tools/add-new-connections?view=vs-2022)
+- [Learn Microsoft - ASP.NET Core Fundamentals: WebSockets](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-7.0)
+- [Learn Microsoft - Connect to an ODBC Data Source: SQL Server Import and Export Wizard](https://learn.microsoft.com/en-us/sql/integration-services/import-export-data/connect-to-an-odbc-data-source-sql-server-import-and-export-wizard?view=sql-server-ver16)
+- [Learn Microsoft - Create a SQL Database by Using a Designer](https://learn.microsoft.com/en-us/visualstudio/data-tools/create-a-sql-database-by-using-a-designer?view=vs-2022)
+- [Learn Microsoft - Create C# Windows Form: Visual Studio](https://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=vs-2022)
+- [Learn Microsoft - SQL Server Linux Setup](https://learn.microsoft.com/en-gb/sql/linux/sql-server-linux-setup?view=sql-server-ver16)
+- [Learn Microsoft - Walkthrough: Creating a Windows Service Application in the Component Designer](https://learn.microsoft.com/en-us/dotnet/framework/windows-services/walkthrough-creating-a-windows-service-application-in-the-component-designer)
+- [Mockaroo](https://www.mockaroo.com/)
+- [Mozilla Developer Network - Writing WebSocket Server](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_serve)
+- [MSDN - NotifyIcon Class](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.notifyicon?view=windowsdesktop-7.0)
+- [MSDN - What is a DSN (Data Source Name)?](https://support.microsoft.com/en-us/topic/what-is-a-dsn-data-source-name-ae9a0c76-22fc-8a30-606e-2436fe26e89f)
+- [Newtonsoft](https://www.newtonsoft.com/json)
+- [SQL Server Downloads](https://www.microsoft.com/en-gb/sql-server/sql-server-downloads?rtc=1)
+- [YouTube - C# WebSocket Client Tutorial](https://www.youtube.com/watch?v=-6bvqwVYwMY)
+- [YouTube - Your First C# Web Service](https://www.youtube.com/watch?v=67DtZbP)
