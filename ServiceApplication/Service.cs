@@ -42,7 +42,7 @@ namespace ServiceApplication
 
         private void InitializeDatabaseConnection()
         {
-            var connectionString = "Driver={SQL Server};Server=DESKTOP-STVGQ9Q;Database=project_csharp;Uid=odbc_user;Pwd=password;";
+            var connectionString = "Driver={SQL Server};Server={Server};Database={database};Uid={user};Pwd={password};";
             connection = new OdbcConnection(connectionString);
         }
 
