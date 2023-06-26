@@ -69,6 +69,7 @@ To run the application, follow these steps:
 - [WebSocket Protocol](https://tools.ietf.org/html/rfc6455)
 - [WebSockets FastAPI](https://fastapi.tiangolo.com/advanced/websockets/)
 - [JSONPlaceholder API](https://jsonplaceholder.typicode.com/users)
+- [DB Browser for SQLite](https://sqlitebrowser.org/)
 
 ## **A Constantly Running Service Application That Resides in The System Tray (C\#)**
 

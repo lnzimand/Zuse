@@ -51,7 +51,6 @@ async def create_user(db: Session, user: schemas.UserCreate):
 
 
 async def update_user(db: Session, user: models.User, updated_user: schemas.UserUpdate):
-    print("SERVICES:", updated_user)
     if updated_user.name:
         user.name = updated_user.name
 

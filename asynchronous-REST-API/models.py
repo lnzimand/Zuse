@@ -28,7 +28,7 @@ class Company(Base):
     __tablename__ = "company"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     catchphrase = Column(String)
     bs = Column(String)
 
